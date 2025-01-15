@@ -1,42 +1,20 @@
 const express = require('express')
-const boodyParser = require('body-parser');
+const app = express();
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop')
+
 const bodyParser = require('body-parser');
 
-const app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));
 
-// app.use('/add-product', (req, res, next)=> {
-//     console.log("got to second middleware");
-//     res.send(
-//     <form action='/product' method='POST'><input type="text" name="title"></input><button type="submit">Add Product</button></form>);
-//     // res.send("<form><input type="text name="title"><button type="submit">Add Product<button/></form>');
-// });
+app.use('/admin', adminRoutes);
+app.use(shopRoutes);
 
-app.use('/add-product', (req, res, next) => {
-    console.log("got to second middleware");
-  
-    res.send(`
-      <form action='/product' method='POST'>
-        <input type="text" name="title">
-        <button type="submit">Add Product</button>
-      </form>
-    `); 
-  });
-
-app.use('/product', (req, res, next)=> {
-    console.log(req.body);
-    res.redirect('/');
-    next();
+app.use((req, res, next)=>{
+  res.status(404).send("<h1>page not found</h1>")
 });
-
-
-app.use('/', (req, res, next)=> {
-    console.log("got to first midware");
-    res.send("<h2>Hello from the / side</h2>");
-    next();
-});
-
 
 
 // const server = http.createServer(app);
