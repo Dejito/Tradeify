@@ -54,21 +54,36 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-  console.log("response req is....", req);
+  console.log("response req is....", req.description);
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
-  const updatedProduct = new Product(
-    prodId,
-    updatedTitle,
-    updatedImageUrl,
-    updatedDesc,
-    updatedPrice
+  Product.findByPk(prodId).then(product => {
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.imageUrl = updatedImageUrl;
+    product.description = updatedDesc;
+    return product.save();
+  }).then(_ => {
+    res.redirect('/admin/products');
+  })
+  .catch( err => {
+    console.log('failed cause of', errr);
+  }
   );
-  updatedProduct.save();
-  res.redirect('/admin/products');
+
+
+  // const updatedProduct = new Product(
+  //   prodId,
+  //   updatedTitle,
+  //   updatedImageUrl,
+  //   updatedDesc,
+  //   updatedPrice
+  // );
+  // updatedProduct.save();
+  // res.redirect('/admin/products');
 };
 
 exports.getProducts = (req, res, next) => {
