@@ -1,0 +1,22 @@
+{
+  "name": "node-first-app",
+  "version": "1.0.0",
+  "description": "dejito learning backend",
+  "license": "ISC",
+  "author": "dejito",
+  "type": "commonjs",
+  "main": "firstapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon firstapp.js"
+  },
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "node": "^25.6.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "nodemon": "^3.1.11"
+  }
+}
