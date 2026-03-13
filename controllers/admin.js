@@ -38,7 +38,7 @@ exports.getEditProduct = (req, res, next) => {
   const prodId = req.params.productId;
   req.user
     .getProducts({ where: { id: prodId } })
-    // Product.findById(prodId)
+    // Product.findByPk(prodId)
     .then(products => {
       const product = products[0];
       if (!product) {
@@ -60,7 +60,7 @@ exports.postEditProduct = (req, res, next) => {
   const updatedPrice = req.body.price;
   const updatedImageUrl = req.body.imageUrl;
   const updatedDesc = req.body.description;
-  Product.findById(prodId)
+  Product.findByPk(prodId)
     .then(product => {
       product.title = updatedTitle;
       product.price = updatedPrice;
@@ -90,7 +90,7 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findById(prodId)
+  Product.findByPk(prodId)
     .then(product => {
       return product.destroy();
     })
