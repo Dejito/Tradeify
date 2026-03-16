@@ -1,14 +1,41 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb'); // ADD THIS
+const { getDb } = require('../util/database'); // ADD THIS
 
-// const sequelize = require('../util/database');
+class Product {
+  constructor(title, price, description, imageUrl) {
+    this.title = title;
+    this.price = price;
+    this.description = description;
+    this.imageUrl = imageUrl;
+  } 
 
-// const Product = sequelize.define('product', {
-  // id: {
-  //   type: Sequelize.INTEGER,
-  //   autoIncrement: true,
-  //   allowNull: false,
-  //   primaryKey: true
-  // },
+  save() {
+    const db = getDb();
+    return db.collection('products')
+    .insertOne(this)
+    .then(result => {
+      console.log('Product saved:', result);
+    })
+    .catch(err => {
+      console.error('Error saving product:', err);
+    });
+  }
+
+  static fetchAll() {
+    const db = getDb();
+    return db.collection('products').find().toArray();
+  }
+
+  static findById(prodId) {
+    const db = getDb();
+    return db.collection('products').findOne({ _id: new mongodb.ObjectId(prodId) });
+  }
+
+}
+
+
+module.exports = Product;
+
   // title: Sequelize.STRING,
   // price: {
   //   type: Sequelize.DOUBLE,
