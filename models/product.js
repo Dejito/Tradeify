@@ -1,5 +1,5 @@
-const mongodb = require('mongodb'); // ADD THIS
-const { getDb } = require('../util/database'); // ADD THIS
+const mongodb = require('mongodb'); 
+const { getDb } = require('../util/database'); 
 
 class Product {
   constructor(title, price, description, imageUrl) {
@@ -28,7 +28,16 @@ class Product {
 
   static findById(prodId) {
     const db = getDb();
-    return db.collection('products').findOne({ _id: new mongodb.ObjectId(prodId) });
+    return db.collection('products')
+    .find({ _id: new mongodb.ObjectId(prodId) })
+    .next()
+    .then(product => {
+      console.log('Product found:', product);
+      return product;
+    })
+    .catch(err => {
+      console.error('Error finding product:', err);
+    });
   }
 
 }
@@ -52,3 +61,5 @@ module.exports = Product;
 // });
 
 // module.exports = Product;
+
+

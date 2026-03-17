@@ -13,30 +13,35 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-// exports.getProduct = (req, res, next) => {
-//   const prodId = req.params.productId;
-//   // Product.findAll({ where: { id: prodId } })
-//   //   .then(products => {
-//   //     res.render('shop/product-detail', {
-//   //       product: products[0],
-//   //       pageTitle: products[0].title,
-//   //       path: '/products'
-//   //     });
-//   //   })
-//   //   .catch(err => console.log(err));
-//   Product.findByPk(prodId)
-//     .then(product => {
-//       res.render('shop/product-detail', {
-//         product: product,
-//         pageTitle: product.title,
-//         path: '/products'
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getProduct = (req, res, next) => {
+  const prodId = req.params.productId;
+
+  Product.findById(prodId)
+    .then(product => {
+      if (!product) {
+        return res.status(404).render('404', {
+          pageTitle: 'Product Not Found',
+          path: '/products'
+        });
+      }
+      res.render('shop/product-detail', {
+        product: product,
+        pageTitle: product.title,
+        path: '/products'
+      });
+    })
+    .catch(err => {
+      console.error('Error in getProduct:', err);
+      res.status(500).render('404', {
+        pageTitle: 'Product Error',
+        path: '/products'
+      });
+    });
+};
 
 exports.getIndex = (req, res, next) => {
-Product.fetchAll()    .then(products => {
+Product.fetchAll()    
+.then(products => {
       res.render('shop/index', {
         prods: products,
         pageTitle: 'Shop',
