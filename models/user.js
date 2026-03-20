@@ -11,7 +11,7 @@ class User {
     return getDb.collection("users").insertOne(this);
   }
 
-  static findByEmail(email) {
+  static findById(prodId) {
     return getDb
       .collection("users")
       .findOne({ _id: new mongodb.ObjectId(prodId) });
