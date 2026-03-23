@@ -8,11 +8,13 @@ class User {
   }
 
   save() {
-    return getDb.collection("users").insertOne(this);
+    const db = getDb();
+    return db.collection("users").insertOne(this);
   }
 
   static findById(prodId) {
-    return getDb
+    const db = getDb();
+    return db
       .collection("users")
       .findOne({ _id: new mongodb.ObjectId(prodId) });
   }
