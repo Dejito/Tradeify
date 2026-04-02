@@ -1,52 +1,48 @@
-const path = require("path");
+const path = require('path');
 
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-const errorController = require("./controllers/error");
-const { mongoConnect } = require("./util/database");
-const User = require("./models/user");
-// const client = require('./util/database');
+const errorController = require('./controllers/error');
+const User = require('./models/user');
 
 const app = express();
 
-app.set("view engine", "ejs");
-app.set("views", "views");
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
-const adminRoutes = require("./routes/admin");
-const shopRoutes = require("./routes/shop");
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
 
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-  User.findById("69bc55afb289e5be5f95f9e5").then((user) => {
-    req.user = new User(user.name, user.email, user.cart, user._id);
-    next();
-    //   })
-    //   .catch(err => console.log(err));
-  });
-});
-app.use("/admin", adminRoutes);
+// app.use((req, res, next) => {
+  // User.findById('5baa2528563f16379fc8a610')
+  //   .then(user => {
+  //     req.user = new User(user.name, user.email, user.cart, user._id);
+  //     next();
+  //   })
+  //   .catch(err => console.log(err));
+// });
+
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 app.use(errorController.get404);
 
-mongoConnect()
-  .then(() => {
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
-    });
+mongoose
+  .connect(
+    'mongodb+srv://dejito_db_user:Secret123@tradeify.emhzkl0.mongodb.net/?appName=tradeify', {
+        useNewUrlParser: true,
+  useUnifiedTopology: true,
+  authSource: "admin" // if needed
+    }
+  )
+  .then(result => {
+    app.listen(3000);
   })
-  .catch((err) => {
-    console.log("App failed to start:", err);
+  .catch(err => {
+    console.log(err);
   });
-
-// mongoConnect.connect().then(() => {
-//   console.log('Connected to MongoDB');
-//       // Send a ping to confirm a successful connection
-//   mongoConnect.db("tradeify").command({ ping: 1 });
-//   app.listen(3000);
-// }).catch(err => {
-//   console.log(err);
-// });
