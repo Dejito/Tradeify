@@ -45,7 +45,7 @@ mongoose
       if (!user) {
         const user = new User({
           name: 'Jito',
-          email: 'jito.skillful.com',
+          email: 'jito@skillful.com',
           cart: { items: [] }
         })
         user.save();
