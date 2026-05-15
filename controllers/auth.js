@@ -30,7 +30,6 @@ exports.postLogin = (req, res, next) => {
 
       if (!user) {
         console.log("No user found with email:", email);
-        console.log("=== LOGIN FAILED ===");
         return res.redirect('/login');
       }
 
@@ -38,12 +37,10 @@ exports.postLogin = (req, res, next) => {
 
       return bcrypt.compare(password, user.password)
         .then(hasMatch => {
-          console.log("Password comparison completed");
           console.log("Password match:", hasMatch);
 
           if (!hasMatch) {
             console.log("Incorrect password");
-            console.log("=== LOGIN FAILED ===");
             return res.redirect('/login');
           }
 
